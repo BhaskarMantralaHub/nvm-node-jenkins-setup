@@ -1,0 +1,24 @@
+# Build Step
+# Checks for a NVM_DIR env variable.
+if [ -z "${NVM_DIR}" ]; then
+  NVM_DIR="$HOME/.nvm"
+fi
+#source ~/.bashrc
+#export -f nvm # This provides nvm to subshell
+
+# This loads nvm
+# The || true is to ignore when nvm complains about a version not being installed
+# nvm install is run later in the script (see a few lines down), so this isn't a big deal
+[ -s "${NVM_DIR}/nvm.sh" ] && source "${NVM_DIR}/nvm.sh" || true # This loads nvm
+[ -s "${NVM_DIR}/nvm.sh" ] && export -f nvm # This provides nvm to subshell
+[ -s "${NVM_DIR}/bash_completion" ] && source "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
+
+# Set a default node version if needed
+if [ ! -f .nvmrc ]; then
+   echo 'v14.21.3' > .nvmrc
+fi
+
+# This will implicitly "use" the version that gets installed
+npm cache clean --force
+
+nvm install
